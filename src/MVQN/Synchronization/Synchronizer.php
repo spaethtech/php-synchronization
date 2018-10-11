@@ -13,15 +13,15 @@ final class Synchronizer
    /**
      * @param array $source
      * @param array $destination
-     * @param ClassMap $sourceMap
-     * @param ClassMap $destinationMap
+     * @param SyncDefinition $sourceMap
+     * @param SyncDefinition $destinationMap
      * @param SyncChanges|null $sourceChanges
      * @param SyncChanges|null $destinationChanges
      * @param string $mapFile
      * @return SyncMap
      * @throws \Exception
      */
-    public static function map(array $source, array $destination, ClassMap $sourceMap, ClassMap $destinationMap,
+    public static function map(array $source, array $destination, SyncDefinition $sourceMap, SyncDefinition $destinationMap,
                                ?SyncChanges &$sourceChanges = null, ?SyncChanges &$destinationChanges = null, string $mapFile = ""): SyncMap
     {
         // Load the existing JSON map file, if one exists...

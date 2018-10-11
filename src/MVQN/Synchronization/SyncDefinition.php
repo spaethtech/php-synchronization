@@ -6,7 +6,7 @@ namespace MVQN\Synchronization;
 
 
 
-final class ClassMap
+final class SyncDefinition
 {
 
     /** @var string */
