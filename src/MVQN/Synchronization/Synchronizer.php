@@ -7,38 +7,37 @@ namespace MVQN\Synchronization;
 
 
 
-final class Synchronizer
+abstract class Synchronizer implements ISynchronizer
 {
 
-   /**
-     * @param array $source
-     * @param array $destination
-     * @param SyncDefinition $sourceMap
-     * @param SyncDefinition $destinationMap
-     * @param SyncChanges|null $sourceChanges
-     * @param SyncChanges|null $destinationChanges
+
+
+    /**
+     * @param array $sourceObjects
+     * @param array $destinationObjects
      * @param string $mapFile
      * @return SyncMap
      * @throws \Exception
      */
-    public static function map(array $source, array $destination, SyncDefinition $sourceMap, SyncDefinition $destinationMap,
-                               ?SyncChanges &$sourceChanges = null, ?SyncChanges &$destinationChanges = null, string $mapFile = ""): SyncMap
+    public static function map(array $sourceObjects, array $destinationObjects): SyncMap
     {
-        // Load the existing JSON map file, if one exists...
-        $loaded = ($mapFile !== "" && file_exists($mapFile)) ? json_decode(file_get_contents($mapFile), true) : [];
+        $syncClass = get_called_class();
+        /** @var Synchronizer $syncClass */
+        $syncClass = new $syncClass();
 
-        if(array_key_exists("map", $loaded))
-            $map = $loaded["map"];
-        else
-            $map = [];
+        $mapFile = $syncClass->getMapFile();
+
+        // Load the existing JSON map file, if one exists...
+        $cached = ($mapFile !== "" && file_exists($mapFile)) ? json_decode(file_get_contents($mapFile), true) : [];
+        $map = array_key_exists("map", $cached) ? $map = $cached["map"] : [];
 
         // Get the source's "key" and "property" property.
-        $sourceKey = $sourceMap->getKey();
-        $sourceProperty = $sourceMap->getProperty();
+        //$sourceKey = $syncClass->getSourceKey();//    "ucrmId"; //$sourceDefinition->getKey();
+        //$sourceProperty = "";// "id"; //$sourceDefinition->getProperty();
 
         // Get the destination's "key" and "property" property.
-        $destinationKey = $destinationMap->getKey();
-        $destinationProperty = $destinationMap->getProperty();
+        //$destinationKey = $syncClass->getDestinationKey();//   "xeroId"; //$destinationDefinition->getKey();
+        //$destinationProperty = "GUID"; //$destinationDefinition->getProperty();
 
 
 
@@ -52,22 +51,28 @@ final class Synchronizer
         $sourceNames = [];
 
         // Loop through the provided source array first...
-        foreach($source as $class)
+        foreach($sourceObjects as $class)
         {
             // Get the currently iterated class.
             $currentClass = get_class($class);
 
-            if($currentClass !== $sourceMap->getClass())
-                throw new \Exception("Class '$currentClass' must be of ClassMap type '{$sourceMap->getClass()}'!");
+            //if($currentClass !== $sourceDefinition->getClass())
+            //    throw new \Exception("Class '$currentClass' must be of ClassMap type '{$sourceDefinition->getClass()}'!");
+
+            $sourceKey = $syncClass->getSourceKey($class);
 
             if ($sourceKey === "")
                 throw new \Exception("Key '$sourceKey' is not in a supported format!");
 
+            $value = $syncClass->getSourceValue($class);
+
+            /*
             // IF a value not was passed for the "property" argument...
             if($sourceProperty === "")
             {
                 // THEN include the entire class as the value, but "unbox" to avoid extraneous properties.
-                $value = json_decode(json_encode($class), true);
+                //$value = json_decode(json_encode($class), true);
+                $value = $syncClass->getSourceValue($class);
             }
             else
             {
@@ -79,9 +84,10 @@ final class Synchronizer
 
                 $value = $class->{$getter}();
             }
+            */
 
             // Generate a "name" for the mapping, using the provided callback.
-            $sourceName = $sourceMap->generateName($class);
+            $sourceName = $syncClass->getSourceName($class); //$sourceDefinition->generateName($class);
 
             // IF the map already contains this lookup...
             if(in_array($sourceName, $sourceNames))
@@ -191,17 +197,22 @@ final class Synchronizer
         $destinationNames = [];
 
         // Loop through the provided destination array next...
-        foreach($destination as $class)
+        foreach($destinationObjects as $class)
         {
             // Get the currently iterated class.
             $currentClass = get_class($class);
 
-            if($currentClass !== $destinationMap->getClass())
-                throw new \Exception("Class '$currentClass' must be of ClassMap type '{$destinationMap->getClass()}'!");
+            //if($currentClass !== $destinationDefinition->getClass())
+            //    throw new \Exception("Class '$currentClass' must be of ClassMap type '{$destinationDefinition->getClass()}'!");
+
+            $destinationKey = $syncClass->getDestinationKey($class);
 
             if ($destinationKey === "")
                 throw new \Exception("Key '$destinationKey' is not in a supported format!");
 
+            $value = $syncClass->getDestinationValue($class);
+
+            /*
             // IF a value not was passed for the "property" argument...
             if($destinationProperty === "")
             {
@@ -218,9 +229,10 @@ final class Synchronizer
 
                 $value = $class->{$getter}();
             }
+            */
 
             // Generate a "name" for the mapping, using the provided callback.
-            $destinationName = $destinationMap->generateName($class);
+            $destinationName = $syncClass->getDestinationName($class); //$destinationDefinition->generateName($class);
 
             // IF the map already contains this lookup...
             if(in_array($destinationName, $destinationNames))
