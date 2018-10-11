@@ -6,7 +6,7 @@ namespace MVQN\Synchronization;
 
 
 
-final class MapResults
+final class SyncChanges implements \JsonSerializable
 {
 
     /** @var string[] */
@@ -50,7 +50,7 @@ final class MapResults
 
     /**
      * @param string $key
-     * @return MapResults
+     * @return SyncChanges
      */
     public function addCreated(string $key): self
     {
@@ -60,7 +60,7 @@ final class MapResults
 
     /**
      * @param int $index
-     * @return MapResults
+     * @return SyncChanges
      */
     public function delCreated(int $index): self
     {
@@ -81,7 +81,7 @@ final class MapResults
 
     /**
      * @param string $key
-     * @return MapResults
+     * @return SyncChanges
      */
     public function addUpdated(string $key): self
     {
@@ -91,7 +91,7 @@ final class MapResults
 
     /**
      * @param int $index
-     * @return MapResults
+     * @return SyncChanges
      */
     public function delUpdated(int $index): self
     {
@@ -112,7 +112,7 @@ final class MapResults
 
     /**
      * @param string $key
-     * @return MapResults
+     * @return SyncChanges
      */
     public function addDeleted(string $key): self
     {
@@ -122,7 +122,7 @@ final class MapResults
 
     /**
      * @param int $index
-     * @return MapResults
+     * @return SyncChanges
      */
     public function delDeleted(int $index): self
     {
@@ -144,7 +144,7 @@ final class MapResults
 
     /**
      * @param string $key
-     * @return MapResults
+     * @return SyncChanges
      */
     public function addMissing(string $key): self
     {
@@ -154,7 +154,7 @@ final class MapResults
 
     /**
      * @param string $key
-     * @return MapResults
+     * @return SyncChanges
      */
     public function delMissing(string $key): self
     {
@@ -178,7 +178,7 @@ final class MapResults
 
     /**
      * @param string $key
-     * @return MapResults
+     * @return SyncChanges
      */
     public function addDuplicated(string $key): self
     {
@@ -188,7 +188,7 @@ final class MapResults
 
     /**
      * @param int $index
-     * @return MapResults
+     * @return SyncChanges
      */
     public function delDuplicated(int $index): self
     {
@@ -201,6 +201,13 @@ final class MapResults
 
 
 
+
+    public function jsonSerialize()
+    {
+        $array = get_object_vars($this);
+
+        return $array;
+    }
 
 
 

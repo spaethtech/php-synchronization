@@ -6,8 +6,6 @@ namespace MVQN\Synchronization;
 
 
 
-use MVQN\UCRM\Plugins\Log;
-use MVQN\UCRM\Plugins\Plugin;
 
 final class Synchronizer
 {
@@ -17,17 +15,22 @@ final class Synchronizer
      * @param array $destination
      * @param ClassMap $sourceMap
      * @param ClassMap $destinationMap
-     * @param MapResults|null $sourceChanges
-     * @param MapResults|null $destinationChanges
+     * @param SyncChanges|null $sourceChanges
+     * @param SyncChanges|null $destinationChanges
      * @param string $mapFile
-     * @return array
+     * @return SyncMap
      * @throws \Exception
      */
     public static function map(array $source, array $destination, ClassMap $sourceMap, ClassMap $destinationMap,
-        ?MapResults &$sourceChanges = null, ?MapResults &$destinationChanges = null, string $mapFile = ""): array
+                               ?SyncChanges &$sourceChanges = null, ?SyncChanges &$destinationChanges = null, string $mapFile = ""): SyncMap
     {
         // Load the existing JSON map file, if one exists...
-        $map = ($mapFile !== "" && file_exists($mapFile)) ? json_decode(file_get_contents($mapFile), true) : [];
+        $loaded = ($mapFile !== "" && file_exists($mapFile)) ? json_decode(file_get_contents($mapFile), true) : [];
+
+        if(array_key_exists("map", $loaded))
+            $map = $loaded["map"];
+        else
+            $map = [];
 
         // Get the source's "key" and "property" property.
         $sourceKey = $sourceMap->getKey();
@@ -43,7 +46,7 @@ final class Synchronizer
         $sourceHandled = $map;
 
         // Initialize the local source mapping results.
-        $sourceChanges = new MapResults();
+        $sourceChanges = new SyncChanges();
 
         // Initialize a duplicate validation list.
         $sourceNames = [];
@@ -182,7 +185,7 @@ final class Synchronizer
         $destinationHandled = $map;
 
         // Initialize the local destination mapping results.
-        $destinationChanges = new MapResults();
+        $destinationChanges = new SyncChanges();
 
         // Initialize a duplicate validation list.
         $destinationNames = [];
@@ -382,6 +385,8 @@ final class Synchronizer
 
 
 
+
+
         // IF a map/cache file has been provided...
         if($mapFile !== "")
         {
@@ -390,11 +395,24 @@ final class Synchronizer
                 mkdir(dirname($mapFile), 0777, true);
 
             // AND save the results into the map file for later usage.
-            file_put_contents($mapFile, json_encode($map, JSON_PRETTY_PRINT));
+            //file_put_contents($mapFile, json_encode($map, JSON_PRETTY_PRINT));
+
+            $syncMap = (new SyncMap($mapFile))
+                ->setMap($map)
+                ->setSourceChanges($sourceChanges)
+                ->setDestinationChanges($destinationChanges)
+                ->save();
+        }
+        else
+        {
+            $syncMap = (new SyncMap())
+                ->setMap($map)
+                ->setSourceChanges($sourceChanges)
+                ->setDestinationChanges($destinationChanges);
         }
 
         // Finally, return the new mapping!
-        return $map;
+        return $syncMap;
     }
 
 
