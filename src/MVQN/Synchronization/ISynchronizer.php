@@ -11,7 +11,6 @@ namespace MVQN\Synchronization;
  */
 interface ISynchronizer
 {
-
     /**
      * @return string Returns a file path for this Synchronizer's cache file.
      */
@@ -35,7 +34,6 @@ interface ISynchronizer
      */
     function getSourceValue($object);
 
-
     /**
      * @param mixed $object The destination object for which to determine the appropriate lookup name.
      * @return string Returns a unique name for which to reference all lookups stored in the SyncMap.
@@ -53,6 +51,5 @@ interface ISynchronizer
      * @return mixed Returns any possible scalar, array or object value to be stored in the SyncMap.
      */
     function getDestinationValue($object);
-
 
 }
