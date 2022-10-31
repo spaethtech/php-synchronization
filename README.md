@@ -1,10 +1,10 @@
-# mvqn/collections
+# spaethtech/collections
 A library for collections, specifically designed for use in MVQN projects, but generic enough for anything!
 
 ## Installation
 Install the latest version with
 ```bash
-composer require mvqn/common
+composer require spaethtech/common
 ```
 
 ## Basic Usage
@@ -27,14 +27,14 @@ COMING SOON
 COMING SOON!
 
 ### Related Packages
-[mvqn/annotations](https://github.com/mvqn/annotations)\
+[spaethtech/annotations](https://github.com/spaethtech/annotations)\
 
 
 ### Submitting bugs and feature requests
-Bugs and feature request are tracked on [Github](https://github.com/mvqn/common/issues)
+Bugs and feature request are tracked on [Github](https://github.com/spaethtech/common/issues)
 
 ### Author
-Ryan Spaeth <[rspaeth@mvqn.net](mailto:rspaeth@mvqn.net)>
+Ryan Spaeth <[rspaeth@spaethtech.com](mailto:rspaeth@spaethtech.com)>
 
 ### License
 This module is licensed under the MIT License - see the `LICENSE` file for details.

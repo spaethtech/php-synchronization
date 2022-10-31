@@ -1,5 +1,5 @@
 {
-    "name": "mvqn/synchronization",
+    "name": "spaethtech/synchronization",
     "description": "A library for synchronization, specifically designed for use in MVQN projects, but generic enough for anything!",
     "minimum-stability": "stable",
     "type": "library",
@@ -7,7 +7,7 @@
     "authors": [
         {
             "name": "Ryan Spaeth",
-            "email": "rspaeth@mvqn.net"
+            "email": "rspaeth@spaethtech.com"
         }
     ],
     "require": {
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\": "src/"
+            "SpaethTech\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MVQN\\": "tests/"
+            "SpaethTech\\": "tests/"
         }
     }
 }

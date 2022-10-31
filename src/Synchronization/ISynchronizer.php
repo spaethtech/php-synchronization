@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Synchronization;
+namespace SpaethTech\Synchronization;
 
 /**
  * Interface ISynchronizer
  *
- * @package MVQN\Synchronization
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @package SpaethTech\Synchronization
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  */
 interface ISynchronizer
 {
