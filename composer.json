@@ -1,5 +1,5 @@
 {
-    "name": "spaethtech/synchronization",
+    "name": "spaethtech/php-synchronization",
     "description": "A library for synchronization, specifically designed for use in MVQN projects, but generic enough for anything!",
     "minimum-stability": "stable",
     "type": "library",
